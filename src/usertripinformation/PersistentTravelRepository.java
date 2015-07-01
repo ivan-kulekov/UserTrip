@@ -1,5 +1,7 @@
 package usertripinformation;
 
+import com.sun.javaws.progress.PreloaderPostEventListener;
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -252,9 +254,10 @@ public class PersistentTravelRepository {
 
   /**
    * Find the User which are in the some city on same time.
-   * @param date is the start date from where to start searching.
+   *
+   * @param date    is the start date from where to start searching.
    * @param dateTwo is the last date , the date to stop searching.
-   * @param trip is the entered trip.
+   * @param trip    is the entered trip.
    * @return the list of users which are in the city.
    * @throws SQLException
    */
@@ -285,6 +288,45 @@ public class PersistentTravelRepository {
     } finally {
       if (statementFindSomeCity != null) {
         statementFindSomeCity.close();
+      }
+      if (resultSet != null) {
+        resultSet.close();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Find the user by enter some characters.
+   *
+   * @param character is the character which enter to find the person.
+   * @return list of users where find in to a database.
+   * @throws SQLException
+   */
+  public List<User> findUserByEnterTheCharacter(String character) throws SQLException {
+
+    List<User> listOfUsers = new ArrayList<User>();
+    PreparedStatement statementFindByChar = null;
+    ResultSet resultSet = null;
+
+    try {
+      statementFindByChar = database.getConnection().prepareCall("SELECT * FROM users WHERE user_name LIKE '" + character + "%'");
+
+      resultSet = statementFindByChar.executeQuery();
+
+      while (resultSet.next()) {
+        User tempUser = convertRowToUser(resultSet);
+        listOfUsers.add(tempUser);
+      }
+      return listOfUsers;
+
+    } catch (SQLException exc) {
+      exc.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      if (statementFindByChar != null) {
+        statementFindByChar.close();
       }
       if (resultSet != null) {
         resultSet.close();
