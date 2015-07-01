@@ -17,6 +17,6 @@ public class Demo {
 //    repository.addUserTravel(user, trip);
 
 
-    System.out.println(repository.findUser("1234312124"));
+    System.out.println(repository.findTrip("Veliko Turnovo"));
   }
 }

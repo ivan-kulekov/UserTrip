@@ -209,6 +209,43 @@ public class PersistentTravelRepository {
     return null;
   }
 
+  /**
+   * Find User Trips by city.
+   *
+   * @param city is the fended city.
+   * @return is the city which is find.
+   * @throws SQLException
+   */
+  public Trip findTrip(String city) throws SQLException {
+    PreparedStatement statementFindTrip = null;
+    ResultSet resultSet = null;
+
+    try {
+      statementFindTrip = database.getConnection().prepareStatement("SELECT * FROM trip WHERE city = ? ");
+
+      statementFindTrip.setString(1, city);
+
+      resultSet = statementFindTrip.executeQuery();
+
+      while (resultSet.next()) {
+        Trip tempTrip = convertRowToTrip(resultSet);
+        return tempTrip;
+      }
+    } catch (SQLException exc) {
+      exc.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      if (statementFindTrip != null) {
+        statementFindTrip.close();
+      }
+      if (resultSet != null) {
+        resultSet.close();
+      }
+    }
+    return null;
+  }
+
 
   /**
    * Make the User and returned back.
