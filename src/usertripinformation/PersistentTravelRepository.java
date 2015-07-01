@@ -303,7 +303,7 @@ public class PersistentTravelRepository {
    * @return list of users where find in to a database.
    * @throws SQLException
    */
-  public List<User> findUserByEnterTheCharacter(String character) throws SQLException {
+  public List<User> findUserByEnterSomeCharacter(String character) throws SQLException {
 
     List<User> listOfUsers = new ArrayList<User>();
     PreparedStatement statementFindByChar = null;
@@ -333,6 +333,30 @@ public class PersistentTravelRepository {
       }
     }
     return null;
+  }
+
+  /**
+   * Drop table from database.
+   *
+   * @param tableName is the name of the table which is to drop from database.
+   * @throws SQLException
+   */
+  public void deleteTableFromDatabase(String tableName) throws SQLException {
+    PreparedStatement statementDeleteTable = null;
+
+    try {
+      statementDeleteTable = database.getConnection().prepareStatement(String.format("DROP table %s", tableName));
+      statementDeleteTable.executeUpdate();
+
+    } catch (SQLException exc) {
+      exc.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      if (statementDeleteTable != null) {
+        statementDeleteTable.close();
+      }
+    }
   }
 
 

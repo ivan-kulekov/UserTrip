@@ -19,6 +19,7 @@ public class Demo {
 
 //    System.out.println(repository.findUserInSameCity(trip.createDate("2015-04-25"), trip.createDate("2015-04-29"), trip));
 
-    System.out.println(repository.findUserByEnterTheCharacter("Iva"));
+//    System.out.println(repository.findUserByEnterSomeCharacter("Iva"));
+//    repository.deleteTableFromDatabase("for_delete");
   }
 }
