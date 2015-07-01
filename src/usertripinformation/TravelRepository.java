@@ -1,5 +1,6 @@
 package usertripinformation;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -13,6 +14,18 @@ public interface TravelRepository {
 
   List<User> getUsers() throws SQLException;
 
-  public List<Trip> getUserTrips();
+  List<Trip> getUserTrips();
+
+  User findUser(String egn);
+
+  List<Trip> findTrip(String city);
+
+  List<User> findUserInSameCity(Date date, Date dateTwo, Trip trip);
+
+  List<User> findUserByEnterSomeCharacter(String character);
+
+  void deleteTableFromDatabase(String tableName);
+
+  List<String> getCountOfVisitedCities();
 
 }

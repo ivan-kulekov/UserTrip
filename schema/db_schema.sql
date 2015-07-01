@@ -66,3 +66,18 @@ UPDATE users SET user_age = ?, user_name = ?, user_email = ? WHERE user_egn = ?;
 
  --Select all trips from database.
  SELECT * FROM trip;
+
+ --display all users start with entered characters.
+ SELECT * FROM users WHERE user_name LIKE '" + character + "%';
+
+ --Find User which are in the same city.
+ SELECT *  FROM users INNER JOIN trip ON users.user_egn = trip.egn WHERE not trip.date_of_arrived > ? and not trip.departure_date < ? and trip.city = ? ORDER BY user_name;
+
+ --Select all data from trip where the city is the entered city.
+ SELECT * FROM trip WHERE city = ? ;
+
+ --Drop the entered table.
+ DROP table %s;
+
+ --Select all data from trip and group it by city on descendant row.
+ SELECT city FROM trip GROUP BY city ORDER BY COUNT(city) desc
