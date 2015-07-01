@@ -216,7 +216,9 @@ public class PersistentTravelRepository {
    * @return is the city which is find.
    * @throws SQLException
    */
-  public Trip findTrip(String city) throws SQLException {
+  public List<Trip> findTrip(String city) throws SQLException {
+
+    List<Trip> listOfTrips = new ArrayList<Trip>();
     PreparedStatement statementFindTrip = null;
     ResultSet resultSet = null;
 
@@ -229,8 +231,9 @@ public class PersistentTravelRepository {
 
       while (resultSet.next()) {
         Trip tempTrip = convertRowToTrip(resultSet);
-        return tempTrip;
+        listOfTrips.add(tempTrip);
       }
+      return listOfTrips;
     } catch (SQLException exc) {
       exc.printStackTrace();
     } catch (ClassNotFoundException e) {
