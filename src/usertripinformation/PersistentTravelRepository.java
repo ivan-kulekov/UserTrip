@@ -359,6 +359,41 @@ public class PersistentTravelRepository {
     }
   }
 
+  /**
+   * Get the count of visiting on the users in city.
+   *
+   * @return the list of users who are visit this city.
+   * @throws SQLException
+   */
+
+  public List<String> getCountOfVisitedCities() throws SQLException {
+    List<String> listOfVisited = new ArrayList<String>();
+    PreparedStatement statementCountVisited = null;
+    ResultSet resultSet = null;
+    try {
+      statementCountVisited = database.getConnection().prepareStatement("SELECT city FROM trip GROUP BY city ORDER BY COUNT(city) desc");
+
+      resultSet = statementCountVisited.executeQuery();
+      while (resultSet.next()) {
+        String city = resultSet.getString("city");
+        listOfVisited.add(city);
+      }
+      return listOfVisited;
+
+    } catch (SQLException exc) {
+      exc.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      if (statementCountVisited != null) {
+        statementCountVisited.close();
+      }
+      if (resultSet != null) {
+        resultSet.close();
+      }
+    }
+    return null;
+  }
 
   /**
    * Make the User and returned back.
