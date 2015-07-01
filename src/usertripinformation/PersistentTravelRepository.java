@@ -1,5 +1,6 @@
 package usertripinformation;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -213,7 +214,7 @@ public class PersistentTravelRepository {
    * Find User Trips by city.
    *
    * @param city is the fended city.
-   * @return is the city which is find.
+   * @return list of trips which are in database.
    * @throws SQLException
    */
   public List<Trip> findTrip(String city) throws SQLException {
@@ -241,6 +242,49 @@ public class PersistentTravelRepository {
     } finally {
       if (statementFindTrip != null) {
         statementFindTrip.close();
+      }
+      if (resultSet != null) {
+        resultSet.close();
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Find the User which are in the some city on same time.
+   * @param date is the start date from where to start searching.
+   * @param dateTwo is the last date , the date to stop searching.
+   * @param trip is the entered trip.
+   * @return the list of users which are in the city.
+   * @throws SQLException
+   */
+  public List<User> findUserInSameCity(Date date, Date dateTwo, Trip trip) throws SQLException {
+
+    List<User> listOfUserInSomeCity = new ArrayList<User>();
+    PreparedStatement statementFindSomeCity = null;
+    ResultSet resultSet = null;
+
+    try {
+      statementFindSomeCity = database.getConnection().prepareStatement("SELECT *  FROM users INNER JOIN trip ON users.user_egn = trip.egn WHERE not trip.date_of_arrived > ? and not trip.departure_date < ? and trip.city = ? ORDER BY user_name");
+
+      statementFindSomeCity.setDate(1, dateTwo);
+      statementFindSomeCity.setDate(2, date);
+      statementFindSomeCity.setString(3, trip.city);
+
+      resultSet = statementFindSomeCity.executeQuery();
+
+      while (resultSet.next()) {
+        User tempUser = convertRowToUser(resultSet);
+        listOfUserInSomeCity.add(tempUser);
+      }
+      return listOfUserInSomeCity;
+    } catch (SQLException exc) {
+      exc.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      if (statementFindSomeCity != null) {
+        statementFindSomeCity.close();
       }
       if (resultSet != null) {
         resultSet.close();

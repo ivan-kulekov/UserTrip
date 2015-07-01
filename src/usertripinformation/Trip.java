@@ -22,7 +22,7 @@ public class Trip {
     this.city = city;
   }
 
-  private Date createDate(String date) {
+  public Date createDate(String date) {
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     java.util.Date dateFormat = null;
 
