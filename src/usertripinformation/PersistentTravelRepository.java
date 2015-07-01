@@ -143,7 +143,7 @@ public class PersistentTravelRepository {
    *
    * @return the trips which are in to a database.
    */
-  public List<Trip> getUserTrips() {
+  public List<Trip> getUserTrips() throws SQLException {
     List<Trip> listOfTrips = new ArrayList<Trip>();
 
     PreparedStatement statementGetUserTrips = null;
@@ -162,6 +162,49 @@ public class PersistentTravelRepository {
       exc.printStackTrace();
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
+    } finally {
+      if (statementGetUserTrips != null) {
+        statementGetUserTrips.close();
+      }
+      if (resultSet != null) {
+        resultSet.close();
+      }
+    }
+    return null;
+  }
+
+
+  /**
+   * Find user by EGN.
+   *
+   * @param egn is the egn on the user to find.
+   * @return fended user.
+   * @throws SQLException
+   */
+  public User findUser(String egn) throws SQLException {
+    PreparedStatement statementFindUser = null;
+    ResultSet resultSet = null;
+    try {
+      statementFindUser = database.getConnection().prepareStatement("SELECT * FROM users WHERE user_egn = ?");
+
+      statementFindUser.setString(1, egn);
+      resultSet = statementFindUser.executeQuery();
+
+      if (resultSet.next()) {
+        User tempUser = convertRowToUser(resultSet);
+        return tempUser;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      if (statementFindUser != null) {
+        statementFindUser.close();
+      }
+      if (resultSet != null) {
+        resultSet.close();
+      }
     }
     return null;
   }
