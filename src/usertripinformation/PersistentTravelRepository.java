@@ -138,6 +138,11 @@ public class PersistentTravelRepository {
     return null;
   }
 
+  /**
+   * Get all trips in database.
+   *
+   * @return the trips which are in to a database.
+   */
   public List<Trip> getUserTrips() {
     List<Trip> listOfTrips = new ArrayList<Trip>();
 

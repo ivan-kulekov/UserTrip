@@ -13,4 +13,6 @@ public interface TravelRepository {
 
   List<User> getUsers() throws SQLException;
 
+  public List<Trip> getUserTrips();
+
 }
